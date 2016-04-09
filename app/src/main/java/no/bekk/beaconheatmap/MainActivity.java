@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        beaconManager.stopRanging(region);
+        beaconManager.stopMonitoring(region);
         super.onPause();
     }
 
