@@ -5,7 +5,7 @@ import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
-class FedraTextBoldView extends TextView {
+public class FedraTextBoldView extends TextView {
 
     public FedraTextBoldView(Context context, AttributeSet attr) {
         super(context, attr);

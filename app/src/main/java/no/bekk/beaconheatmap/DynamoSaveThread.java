@@ -9,7 +9,7 @@ import com.estimote.sdk.Utils;
 import java.util.List;
 
 
-class DynamoSaveThread extends AsyncTask<List<Beacon>, Void, Void> {
+public class DynamoSaveThread extends AsyncTask<List<Beacon>, Void, Void> {
 
     private DynamoDBMapper mapper = null;
 
