@@ -1,3 +1,3 @@
 # BeaconHeatMap
 
-An typical android project
+A typical android project
