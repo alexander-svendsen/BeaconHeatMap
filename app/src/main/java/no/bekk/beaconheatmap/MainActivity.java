@@ -1,8 +1,10 @@
 package no.bekk.beaconheatmap;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
@@ -33,21 +35,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("");
 
         // Configure device list.
         adapter = new BeaconAdapter(this, new ArrayList<Beacon>());
         final ListView list = (ListView) findViewById(R.id.beacon_list);
-
-        assert list != null;
         list.setAdapter(adapter);
 
         beaconManager = new BeaconManager(this);
-        beaconManager.setRangingListener(new BeaconManager.RangingListener() {
+
+        beaconManager.setMonitoringListener(new BeaconManager.MonitoringListener() {
             @Override
-            public void onBeaconsDiscovered(Region region, final List<Beacon> beacons) {
+            public void onEnteredRegion(Region region, final List<Beacon> beacons) {
+                Log.d("Main", "Found beacons");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -55,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
             }
+            @Override
+            public void onExitedRegion(Region region) {}
         });
 
         setSupportActionBar(toolbar);
@@ -63,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         beaconManager.disconnect();
-
         super.onDestroy();
     }
 
@@ -73,16 +75,14 @@ public class MainActivity extends AppCompatActivity {
 
         if(SystemRequirementsChecker.checkWithDefaultDialogs(this)){
             startScanning();
-//            Intent service = new Intent(getApplicationContext(), BeaconMonitorService.class);
-//            startService(service);
+            Intent service = new Intent(this, BeaconMonitorService.class);
+            startService(service);
         }
-
     }
 
     @Override
     protected void onPause() {
         beaconManager.stopRanging(region);
-
         super.onPause();
     }
 
@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
             @Override
             public void onServiceReady() {
-                beaconManager.startRanging(region);
+                beaconManager.startMonitoring(region);
             }
         });
     }

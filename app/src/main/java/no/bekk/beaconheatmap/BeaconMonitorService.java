@@ -9,6 +9,7 @@ import android.util.Log;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
+import com.estimote.sdk.EstimoteSDK;
 import com.estimote.sdk.Region;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public class BeaconMonitorService extends Service {
     private BeaconManager beaconManager = null;
     public DynamoDBMapper mapper = null;
 
-    private Region region =  new Region("rid",
+    private Region region =  new Region("monitorService",
             Constants.PROXIMITY_UUID,
             Constants.BEACON_MAJOR_NUMBER,
             null);
@@ -40,13 +41,14 @@ public class BeaconMonitorService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        EstimoteSDK.enableDebugLogging(true);
 
         Log.d(TAG, "Service Created");
 
         AmazonClientManager amazonClientManager = new AmazonClientManager(getApplicationContext());
         mapper = new DynamoDBMapper(amazonClientManager.ddb());
 
-        beaconManager = new BeaconManager(getApplicationContext());
+        beaconManager = new BeaconManager(this);
         beaconManager.setForegroundScanPeriod(300, 10000);
         beaconManager.setBackgroundScanPeriod(300, 10000);
 
@@ -62,6 +64,7 @@ public class BeaconMonitorService extends Service {
     }
 
     private void startScanning() {
+        Log.d(TAG, "Starting scanning");
         beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
             @Override public void onServiceReady() {
                 beaconManager.startRanging(region);
