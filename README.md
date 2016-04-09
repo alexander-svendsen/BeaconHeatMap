@@ -5,3 +5,5 @@ the background and sends them to our storage, for further use in our HeatMap sys
 
 Secondly when opening the application it displays the current nearby BEKK beacons to the user.
 This is mostly there for debug purposes when testing the application.
+
+![Andorid](https://cloud.githubusercontent.com/assets/2320398/14406979/576e3fb6-feb8-11e5-98fd-b27f16678cab.png)
