@@ -10,7 +10,7 @@ This is mostly there for debug purposes when testing the application.
 
 ## Requirement:
 
-Android v6.0
+Android v5.0 and up
 
 ## Installation
 
